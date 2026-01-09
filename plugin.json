@@ -1,0 +1,12 @@
+{
+  "main": "dist/index.html",
+  "logo": "logo.png",
+  "preload": "preload.js",
+  "features": [
+    {
+      "code": "prompt",
+      "explain": "提示词管理",
+      "cmds": ["prompt", "提示词","tsc"]
+    }
+  ]
+}
