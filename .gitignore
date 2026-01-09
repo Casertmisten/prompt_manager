@@ -12,6 +12,20 @@ dist
 dist-ssr
 *.local
 
+# Build caches
+.vite
+.cache
+*.tsbuildinfo
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Testing
+coverage
+.nyc_output
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -22,3 +36,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Tool-specific
+.iflow
+plugin.json
+preload.js
