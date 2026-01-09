@@ -38,6 +38,7 @@ coverage
 *.sw?
 
 # Tool-specific
+.claude
 .iflow
 plugin.json
 preload.js
