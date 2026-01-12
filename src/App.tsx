@@ -62,8 +62,10 @@ function App() {
       updatePrompt(selectedPrompt.id, updatedFields, contentChanged);
       setIsEditorOpen(false);
 
-      // 从 store 中获取最新的 prompt 对象
-      const latestPrompt = prompts.find((p) => p.id === selectedPrompt.id);
+      // 使用 getState() 获取更新后的 store 状态
+      const latestPrompt = usePromptStore.getState().prompts.find(
+        (p) => p.id === selectedPrompt.id
+      );
       if (latestPrompt) {
         setSelectedPrompt(latestPrompt);
         setEditingPrompt(latestPrompt);
