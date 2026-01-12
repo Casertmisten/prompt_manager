@@ -76,7 +76,7 @@ export const ToastContainer: React.FC<ToastContainerProps> = ({
   onClose,
 }) => {
   return (
-    <div className="fixed top-4 right-4 z-50 flex flex-col gap-2">
+    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 items-center">
       {toasts.map((toast) => (
         <Toast key={toast.id} {...toast} onClose={onClose} />
       ))}
