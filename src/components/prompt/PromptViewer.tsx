@@ -7,6 +7,7 @@ import { formatDate } from '../../utils/formatters';
 import { Button } from '../ui';
 import { VersionHistory } from './VersionHistory';
 import { VersionDiffViewer } from './VersionDiffViewer';
+import { useUIStore } from '../../store/uiSlice';
 
 interface PromptViewerProps {
   prompt: Prompt;
@@ -21,6 +22,7 @@ export const PromptViewer: React.FC<PromptViewerProps> = ({
   onEdit,
   onDelete,
 }) => {
+  const { showToast } = useUIStore();
   const [isVersionHistoryOpen, setIsVersionHistoryOpen] = useState(false);
   const [diffVersions, setDiffVersions] = useState<[Version | null, Version | null]>([null, null]);
   const [outputEffect, setOutputEffect] = useState(prompt.outputEffect || '');
@@ -74,10 +76,21 @@ export const PromptViewer: React.FC<PromptViewerProps> = ({
   const handleCopyContent = async () => {
     try {
       await navigator.clipboard.writeText(currentVersion.content);
-      // 可以添加一个提示信息，这里使用简单的控制台日志
       console.log('[PromptViewer] Content copied to clipboard');
+      // 显示复制成功提示
+      showToast({
+        message: '复制成功',
+        type: 'success',
+        duration: 2000,
+      });
     } catch (err) {
       console.error('[PromptViewer] Failed to copy content:', err);
+      // 显示复制失败提示
+      showToast({
+        message: '复制失败',
+        type: 'error',
+        duration: 3000,
+      });
     }
   };
 

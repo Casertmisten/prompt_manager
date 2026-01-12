@@ -9,7 +9,7 @@ import type { Prompt, PromptFilters } from './types/prompt';
 import { createPrompt, searchPrompts } from './services/promptService';
 
 function App() {
-  const { toasts, removeToast, theme } = useUIStore();
+  const { toasts, removeToast, theme, showToast } = useUIStore();
   const { prompts, setPrompts, addPrompt, updatePrompt, deletePrompt, toggleFavorite, setSearchTerm, searchTerm, filters, setFilters } = usePromptStore();
 
   const [view, setView] = useState<'list' | 'view'>('list');
@@ -101,9 +101,21 @@ function App() {
       if (currentVersion) {
         await navigator.clipboard.writeText(currentVersion.content);
         console.log('[App] Copied prompt content for:', prompt.title);
+        // 显示复制成功提示
+        showToast({
+          message: '复制成功',
+          type: 'success',
+          duration: 2000,
+        });
       }
     } catch (err) {
       console.error('[App] Failed to copy prompt content:', err);
+      // 显示复制失败提示
+      showToast({
+        message: '复制失败',
+        type: 'error',
+        duration: 3000,
+      });
     }
   };
 
