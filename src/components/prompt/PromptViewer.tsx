@@ -228,7 +228,7 @@ export const PromptViewer: React.FC<PromptViewerProps> = ({
           onClick={handlePreviousVersion}
           disabled={currentVersionIndex === 0}
           className={`
-            absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10
+            absolute left-[-40px] top-1/2 -translate-y-1/2 -translate-x-1/2 z-10
             flex items-center justify-center
             w-10 h-10 rounded-full
             bg-white dark:bg-gray-800
@@ -303,7 +303,7 @@ export const PromptViewer: React.FC<PromptViewerProps> = ({
           onClick={handleNextVersion}
           disabled={currentVersionIndex === latestPrompt.versions.length - 1}
           className={`
-            absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10
+            absolute right-[-40px] top-1/2 -translate-y-1/2 translate-x-1/2 z-10
             flex items-center justify-center
             w-10 h-10 rounded-full
             bg-white dark:bg-gray-800
