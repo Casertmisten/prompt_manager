@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Edit, Trash2, ArrowLeft, Clock, Tag, FileText, History, Eye, Edit3, ChevronLeft, ChevronRight, Copy } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import type { Prompt, Version } from '../../types/prompt';
 import { formatDate } from '../../utils/formatters';
 import { Button } from '../ui';
@@ -31,6 +31,7 @@ export const PromptViewer: React.FC<PromptViewerProps> = ({
   const [outputEffect, setOutputEffect] = useState(prompt.outputEffect || '');
   const [isPreviewMode, setIsPreviewMode] = useState(true);
   const [direction, setDirection] = useState(0); // -1 for left, 1 for right, 0 for no animation
+  const [animatingVersion, setAnimatingVersion] = useState<string | null>(null); // Track which version is animating
 
   // 从 store 中获取最新的 prompt 数据
   const latestPrompt = prompts.find(p => p.id === prompt.id) || prompt;
@@ -76,7 +77,10 @@ export const PromptViewer: React.FC<PromptViewerProps> = ({
   const handlePreviousVersion = () => {
     if (currentVersionIndex > 0) {
       setDirection(-1);
-      setCurrentVersionIndex(currentVersionIndex - 1);
+      setAnimatingVersion(currentVersion.version);
+      setTimeout(() => {
+        setCurrentVersionIndex(currentVersionIndex - 1);
+      }, 50);
     }
   };
 
@@ -84,7 +88,10 @@ export const PromptViewer: React.FC<PromptViewerProps> = ({
   const handleNextVersion = () => {
     if (currentVersionIndex < latestPrompt.versions.length - 1) {
       setDirection(1);
-      setCurrentVersionIndex(currentVersionIndex + 1);
+      setAnimatingVersion(currentVersion.version);
+      setTimeout(() => {
+        setCurrentVersionIndex(currentVersionIndex + 1);
+      }, 50);
     }
   };
 
@@ -240,23 +247,55 @@ export const PromptViewer: React.FC<PromptViewerProps> = ({
 
         {/* 提示词内容框 - 带切换动画 */}
         <div className="relative h-[500px] overflow-hidden">
-          <AnimatePresence mode="popLayout" initial={false}>
+          {animatingVersion && currentVersion.version !== animatingVersion ? (
+            <div className="absolute inset-0 flex items-center" style={{ gap: '20px' }}>
+              {/* 旧版本卡片 */}
+              <motion.div
+                key={`prev-${animatingVersion}`}
+                initial={{ x: '0%' }}
+                animate={{ x: `${-direction * 100}%` }}
+                transition={{
+                  duration: 0.3,
+                  ease: "easeInOut"
+                }}
+                className="absolute left-0 right-0 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-6 overflow-y-auto"
+                style={{ height: '100%' }}
+              >
+                <pre className="whitespace-pre-wrap font-mono text-sm text-gray-900 dark:text-white leading-relaxed">
+                  {latestPrompt.versions.find(v => v.version === animatingVersion)?.content || ''}
+                </pre>
+              </motion.div>
+
+              {/* 新版本卡片 */}
+              <motion.div
+                key={`new-${currentVersion.version}`}
+                initial={{ x: `${direction * 100}%` }}
+                animate={{ x: '0%' }}
+                transition={{
+                  duration: 0.3,
+                  ease: "easeInOut"
+                }}
+                className="absolute left-0 right-0 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-6 overflow-y-auto"
+                style={{ height: '100%' }}
+                onAnimationComplete={() => setAnimatingVersion(null)}
+              >
+                <pre className="whitespace-pre-wrap font-mono text-sm text-gray-900 dark:text-white leading-relaxed">
+                  {currentVersion.content}
+                </pre>
+              </motion.div>
+            </div>
+          ) : (
             <motion.div
               key={currentVersion.version}
-              initial={direction !== 0 ? { x: direction * 100, opacity: 0 } : false}
-              animate={{ x: 0, opacity: 1 }}
-              exit={direction !== 0 ? { x: direction * -100, opacity: 0 } : false}
-              transition={{
-                duration: 0.3,
-                ease: "easeInOut"
-              }}
+              initial={false}
+              animate={{ opacity: 1 }}
               className="absolute inset-0 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-6 overflow-y-auto"
             >
               <pre className="whitespace-pre-wrap font-mono text-sm text-gray-900 dark:text-white leading-relaxed">
                 {currentVersion.content}
               </pre>
             </motion.div>
-          </AnimatePresence>
+          )}
         </div>
 
         {/* 右侧箭头按钮 */}
