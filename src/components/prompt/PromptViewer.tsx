@@ -215,13 +215,13 @@ export const PromptViewer: React.FC<PromptViewerProps> = ({
       )}
 
       {/* Content */}
-      <div className="relative flex items-center mb-6">
+      <div className="relative mb-6">
         {/* 左侧箭头按钮 */}
         <button
           onClick={handlePreviousVersion}
           disabled={currentVersionIndex === 0}
           className={`
-            absolute -left-[70px] top-1/2 -translate-y-1/2 z-10
+            absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10
             flex items-center justify-center
             w-10 h-10 rounded-full
             bg-white dark:bg-gray-800
@@ -239,7 +239,7 @@ export const PromptViewer: React.FC<PromptViewerProps> = ({
         </button>
 
         {/* 提示词内容框 - 带切换动画 */}
-        <div className="flex-1 overflow-hidden">
+        <div className="relative h-[500px] overflow-hidden">
           <AnimatePresence mode="popLayout" initial={false}>
             <motion.div
               key={currentVersion.version}
@@ -250,7 +250,7 @@ export const PromptViewer: React.FC<PromptViewerProps> = ({
                 duration: 0.3,
                 ease: "easeInOut"
               }}
-              className="absolute w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-6 h-[500px] overflow-y-auto"
+              className="absolute inset-0 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-6 overflow-y-auto"
             >
               <pre className="whitespace-pre-wrap font-mono text-sm text-gray-900 dark:text-white leading-relaxed">
                 {currentVersion.content}
@@ -264,7 +264,7 @@ export const PromptViewer: React.FC<PromptViewerProps> = ({
           onClick={handleNextVersion}
           disabled={currentVersionIndex === latestPrompt.versions.length - 1}
           className={`
-            absolute -right-[70px] top-1/2 -translate-y-1/2 z-10
+            absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10
             flex items-center justify-center
             w-10 h-10 rounded-full
             bg-white dark:bg-gray-800
@@ -276,7 +276,7 @@ export const PromptViewer: React.FC<PromptViewerProps> = ({
             transition-all duration-200
             shadow-lg
           `}
-          title={`下一个版本 (版本 ${currentVersionIndex < latestPrompt.versions.length - 1 ? latestPrompt.versions[currentVersionIndex + 1].version : 'N/A'})`}
+          title={`下一个版本 (版本 ${currentVersionIndex < latestVersion.length - 1 ? latestPrompt.versions[currentVersionIndex + 1].version : 'N/A'})`}
         >
           <ChevronRight className="w-5 h-5" />
         </button>
