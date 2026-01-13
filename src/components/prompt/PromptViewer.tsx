@@ -243,9 +243,9 @@ export const PromptViewer: React.FC<PromptViewerProps> = ({
           <AnimatePresence mode="popLayout" initial={false}>
             <motion.div
               key={currentVersion.version}
-              initial={{ x: direction * 100, opacity: 0 }}
+              initial={direction !== 0 ? { x: direction * 100, opacity: 0 } : false}
               animate={{ x: 0, opacity: 1 }}
-              exit={{ x: direction * -100, opacity: 0 }}
+              exit={direction !== 0 ? { x: direction * -100, opacity: 0 } : false}
               transition={{
                 duration: 0.3,
                 ease: "easeInOut"
