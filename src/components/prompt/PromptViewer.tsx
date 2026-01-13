@@ -240,17 +240,17 @@ export const PromptViewer: React.FC<PromptViewerProps> = ({
 
         {/* 提示词内容框 - 带切换动画 */}
         <div className="flex-1 overflow-hidden">
-          <AnimatePresence mode="wait" initial={false}>
+          <AnimatePresence mode="popLayout" initial={false}>
             <motion.div
               key={currentVersion.version}
-              initial={{ opacity: 0, x: direction * -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: direction * 50 }}
+              initial={{ x: direction * 100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: direction * -100, opacity: 0 }}
               transition={{
-                opacity: { duration: 0.2 },
-                x: { duration: 0.3, ease: "easeInOut" }
+                duration: 0.3,
+                ease: "easeInOut"
               }}
-              className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-6 h-[500px] overflow-y-auto"
+              className="absolute w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-6 h-[500px] overflow-y-auto"
             >
               <pre className="whitespace-pre-wrap font-mono text-sm text-gray-900 dark:text-white leading-relaxed">
                 {currentVersion.content}
