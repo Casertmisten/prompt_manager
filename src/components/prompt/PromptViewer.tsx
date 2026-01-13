@@ -243,9 +243,9 @@ export const PromptViewer: React.FC<PromptViewerProps> = ({
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={currentVersion.version}
-              initial={{ opacity: 0, x: direction * 50 }}
+              initial={{ opacity: 0, x: direction * -50 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: direction * -50 }}
+              exit={{ opacity: 0, x: direction * 50 }}
               transition={{
                 opacity: { duration: 0.2 },
                 x: { duration: 0.3, ease: "easeInOut" }
