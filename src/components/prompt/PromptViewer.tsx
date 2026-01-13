@@ -255,7 +255,7 @@ export const PromptViewer: React.FC<PromptViewerProps> = ({
                 initial={{ x: '0%' }}
                 animate={{ x: `${-direction * 100}%` }}
                 transition={{
-                  duration: 0.3,
+                  duration: 0.6,
                   ease: "easeInOut"
                 }}
                 className="absolute left-0 right-0 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-6 overflow-y-auto"
@@ -272,7 +272,7 @@ export const PromptViewer: React.FC<PromptViewerProps> = ({
                 initial={{ x: `${direction * 100}%` }}
                 animate={{ x: '0%' }}
                 transition={{
-                  duration: 0.3,
+                  duration: 0.6,
                   ease: "easeInOut"
                 }}
                 className="absolute left-0 right-0 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-6 overflow-y-auto"
