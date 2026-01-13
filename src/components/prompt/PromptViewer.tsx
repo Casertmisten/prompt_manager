@@ -276,7 +276,7 @@ export const PromptViewer: React.FC<PromptViewerProps> = ({
             transition-all duration-200
             shadow-lg
           `}
-          title={`下一个版本 (版本 ${currentVersionIndex < latestVersion.length - 1 ? latestPrompt.versions[currentVersionIndex + 1].version : 'N/A'})`}
+          title={`下一个版本 (版本 ${currentVersionIndex < latestPrompt.versions.length - 1 ? latestPrompt.versions[currentVersionIndex + 1].version : 'N/A'})`}
         >
           <ChevronRight className="w-5 h-5" />
         </button>
