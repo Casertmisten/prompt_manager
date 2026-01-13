@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Edit, Trash2, ArrowLeft, Clock, Tag, FileText, History, Eye, Edit3, ChevronLeft, ChevronRight, Copy } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { motion, AnimatePresence } from 'framer-motion';
 import type { Prompt, Version } from '../../types/prompt';
 import { formatDate } from '../../utils/formatters';
 import { Button } from '../ui';
@@ -29,6 +30,7 @@ export const PromptViewer: React.FC<PromptViewerProps> = ({
   const [diffVersions, setDiffVersions] = useState<[Version | null, Version | null]>([null, null]);
   const [outputEffect, setOutputEffect] = useState(prompt.outputEffect || '');
   const [isPreviewMode, setIsPreviewMode] = useState(true);
+  const [direction, setDirection] = useState(0); // -1 for left, 1 for right, 0 for no animation
 
   // 从 store 中获取最新的 prompt 数据
   const latestPrompt = prompts.find(p => p.id === prompt.id) || prompt;
@@ -73,6 +75,7 @@ export const PromptViewer: React.FC<PromptViewerProps> = ({
   // 切换到上一个版本
   const handlePreviousVersion = () => {
     if (currentVersionIndex > 0) {
+      setDirection(-1);
       setCurrentVersionIndex(currentVersionIndex - 1);
     }
   };
@@ -80,6 +83,7 @@ export const PromptViewer: React.FC<PromptViewerProps> = ({
   // 切换到下一个版本
   const handleNextVersion = () => {
     if (currentVersionIndex < latestPrompt.versions.length - 1) {
+      setDirection(1);
       setCurrentVersionIndex(currentVersionIndex + 1);
     }
   };
@@ -234,11 +238,25 @@ export const PromptViewer: React.FC<PromptViewerProps> = ({
           <ChevronLeft className="w-5 h-5" />
         </button>
 
-        {/* 提示词内容框 */}
-        <div className="flex-1 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-6 h-[500px] overflow-y-auto">
-          <pre className="whitespace-pre-wrap font-mono text-sm text-gray-900 dark:text-white leading-relaxed">
-            {currentVersion.content}
-          </pre>
+        {/* 提示词内容框 - 带切换动画 */}
+        <div className="flex-1 overflow-hidden">
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={currentVersion.version}
+              initial={{ opacity: 0, x: direction * 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: direction * -50 }}
+              transition={{
+                opacity: { duration: 0.2 },
+                x: { duration: 0.3, ease: "easeInOut" }
+              }}
+              className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-6 h-[500px] overflow-y-auto"
+            >
+              <pre className="whitespace-pre-wrap font-mono text-sm text-gray-900 dark:text-white leading-relaxed">
+                {currentVersion.content}
+              </pre>
+            </motion.div>
+          </AnimatePresence>
         </div>
 
         {/* 右侧箭头按钮 */}
